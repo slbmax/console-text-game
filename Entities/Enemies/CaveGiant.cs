@@ -3,7 +3,7 @@ namespace coursework.Entities.Enemies
 {
     public class CaveGiant : Giant
     {
-        private double _attackReductionCoeff = 0.95;
+        private double _attackReductionCoeff = 0.965;
         public CaveGiant(int level, double hpBonus) : base(level)
         {
             this._mobName = "Cave " + _mobName;

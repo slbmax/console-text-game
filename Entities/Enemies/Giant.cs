@@ -7,11 +7,11 @@ namespace coursework.Entities.Enemies
         public Giant(int level)
         {
             this._mobName = "giant";
-            this.HealthLimit = 1000 + level * 100;
+            this.HealthLimit = 900 + level * 100;
             this.Health = HealthLimit;
-            this.Armor = 1000 + level * 100;
+            this.Armor = 900 + level * 100;
             this.ArmorLimit = Armor;
-            this.Attack = 500 + level * 100;
+            this.Attack = 450 + level * 100;
             this.coinsAward = 100;
             this.expAward = 300;
         }

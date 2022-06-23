@@ -1,5 +1,10 @@
 using static System.Console;
 using static System.Threading.Thread;
+
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Xml.Serialization;
+
 using coursework.Entities.Players;
 using coursework.Entities.Enemies;
 using coursework.Locations;
@@ -63,6 +68,16 @@ namespace coursework
             _player.nickName = nickName;
             _quests = new Quest(_player);
             WriteLine("\nGreat choise!");
+
+
+            // string json = JsonSerializer.Serialize(_player);
+            // WriteLine(json);
+
+            // XmlSerializer ser = new XmlSerializer(typeof(Magician));
+            // StreamWriter writer = new StreamWriter("Maks.xml");
+            // ser.Serialize(writer, _player);
+            // writer.Close();
+
             WriteLine("Now you can explore this fantastic world!");
             GameChoise();
         }
@@ -119,16 +134,15 @@ namespace coursework
             while(true)
             {
                 WriteLine("\nWhat do you want to buy?");
-                WriteLine($"1. Big healing potion - {proxy.bigHealingPotionPrice} coins [3d-level character or higher]");
-                WriteLine($"2. Small healing potion - {proxy.smallHealingPotionPrice} coins [2d-level character or higher]");
-                WriteLine($"3. Big rage potion - {proxy.bigRagePotionPrice} coins [4th-level character or higher]");
-                WriteLine($"4. Small rage potion - {proxy.smallRagePotionPrice} coins [3th-level character or higher]");
-                WriteLine($"5. Big mana potion - {proxy.bigManaPotionPrice} coins [5th-level character or higher]");
-                WriteLine($"6. Small mana potion - {proxy.smallManaPotionPrice} coins [4th-level character or higher]");
-                WriteLine($"7. MYSTERIOUS potion - {proxy.mysteriousPotionPrice} coins [5d-level character or higher]");
-                WriteLine("//TODOOOOOOO");
-                WriteLine("9. Check balance");
-                WriteLine("10. Exit shop");
+                WriteLine($"1. Big healing potion    [{proxy.bigHealingPotionPrice}] coins [2d-level character or higher]");
+                WriteLine($"2. Small healing potion  [{proxy.smallHealingPotionPrice}] coins [1st-level character or higher]");
+                WriteLine($"3. Big rage potion       [{proxy.bigRagePotionPrice}] coins [3th-level character or higher]");
+                WriteLine($"4. Small rage potion     [{proxy.smallRagePotionPrice}] coins [2th-level character or higher]");
+                WriteLine($"5. Big mana potion       [{proxy.bigManaPotionPrice}] coins [4th-level character or higher]");
+                WriteLine($"6. Small mana potion     [{proxy.smallManaPotionPrice}] coins [3th-level character or higher]");
+                WriteLine($"7. MYSTERIOUS potion     [{proxy.mysteriousPotionPrice}] coins [4d-level character or higher]");
+                WriteLine("8. Check balance");
+                WriteLine("9. Exit shop");
 
                 switch(ReadLine())
                 {
@@ -153,10 +167,10 @@ namespace coursework
                     case "7":
                         proxy.SellMysteriousPotion(_player);
                         break;        
-                    case "9":
-                        WriteLine($"Your balance is {_player.Coins} coins");
+                    case "8":
+                        WriteLine($"\nYour balance is {_player.Coins} coins");
                         break;
-                    case "10":
+                    case "9":
                         WriteLine("[---------------Shop---------------]");
                         return;
                     default:
@@ -169,15 +183,15 @@ namespace coursework
         {
             WriteLine("\n[---------------Quests---------------]");
             WriteLine("Current quests:");
-            WriteLine($"Kill {_quests.CurrentSlimeAim} slimes " +
-            $"[{_quests.SlimeCounter}/{_quests.CurrentSlimeAim} slimes were killed] -- reward: {_quests.SlimeQuestCost} coins");
+            WriteLine($"Kill {_quests.CurrentSlimeAim} slimes" +
+            $"  [{_quests.SlimeCounter}/{_quests.CurrentSlimeAim} slimes were killed] -- reward: {_quests.SlimeQuestCost} coins");
             WriteLine($"Kill {_quests.CurrentWolfAim} wolfes " +
-            $"[{_quests.WolfCounter}/{_quests.CurrentWolfAim} wolfs were killed] -- reward: {_quests.WolfQuestCost} coins");
+            $"  [{_quests.WolfCounter}/{_quests.CurrentWolfAim} wolfs were killed] -- reward: {_quests.WolfQuestCost} coins");
             WriteLine($"Kill {_quests.CurrentGiantAim} giants " +
-            $"[{_quests.GiantCounter}/{_quests.CurrentGiantAim} giants were killed] -- reward: {_quests.GiantQuestCost} coins");
+            $"  [{_quests.GiantCounter}/{_quests.CurrentGiantAim} giants were killed] -- reward: {_quests.GiantQuestCost} coins");
             WriteLine($"Achieve {_quests.CurrentLevelAim} level [Current level - {_player.Level}] -- reward: {_quests.PlayerLevelQuestCost} coins");
             WriteLine($"Sip {_quests.CurrentPotionAim} potions " +
-            $"[{_quests.PotionCounter}/{_quests.CurrentPotionAim} potions were sipped] -- reward: {_quests.PotionQuestCost} coins");
+            $"  [{_quests.PotionCounter}/{_quests.CurrentPotionAim} potions were sipped] -- reward: {_quests.PotionQuestCost} coins");
             WriteLine("[---------------Quests---------------]");
             WriteLine("\nPress any button to exit");
             ReadKey();
@@ -228,7 +242,7 @@ namespace coursework
                 Sleep(2000);
                 List<Enemy> enemies = new List<Enemy>();
                 Random rand = new Random();
-                switch(rand.Next(1,2))
+                switch(rand.Next(0,3))
                 {
                     case 0:
                         PlayerWords("Eeeeewww, slimes!");
@@ -267,16 +281,18 @@ namespace coursework
                         return;
                     }
                 }
-            }
-            
+            }  
         }
         private static bool Combat(List<Enemy> enemies)
         {
             WriteLine("\n[---------------COMBAT---------------]");
             WriteLine("COMBAT BEGINS!");
             Sleep(2000);
-            int expAward = enemies[0].expAward * enemies.Count;
-            int coinsAward = enemies[0].coinsAward * enemies.Count;
+            int expAward = enemies[0].expAward;
+            int coinsAward = enemies[0].coinsAward;
+            string enemyType = enemies[0].ToString();
+            int enemiesCount = enemies.Count;
+            int currwolfCounter = _quests.WolfCounter;
             bool isPlayerWin = false;
             bool cycle = true;
             Random rand = new Random();
@@ -334,7 +350,7 @@ namespace coursework
                             break;
                         }
                     }
-                    if(enemies[0].ToString().Contains("Wolf") && turnCounter != 0)
+                    if(enemyType.Contains("Wolf") && turnCounter != 0)
                     {
                         WriteLine("\nAuuuuuuuufff");
                         enemies = CloneWolfs(enemies);
@@ -349,6 +365,12 @@ namespace coursework
             {
                 PlayerWords("YAY!!\nAll enemies are defeated");
                 WriteLine("\nCongratulations! Your reward!");
+                if(enemyType.Contains("Wolf"))
+                {
+                    enemiesCount = _quests.WolfCounter - currwolfCounter;
+                }
+                expAward *= enemiesCount;
+                coinsAward *= enemiesCount;
                 _player.EarnAwards(coinsAward, expAward);
             }
             else
@@ -383,6 +405,15 @@ namespace coursework
                 switch(ReadLine())
                 {
                     case "1":
+                        int curEnemy = ChooseEnemy(enemies);
+                        if(curEnemy == -1 || !_player.MainAttack(enemies[curEnemy-1]))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            return;
+                        }
                     case "2":
                         if(!_player.SecondaryAttack(enemies))
                         {
@@ -402,6 +433,15 @@ namespace coursework
                             return;
                         }
                     case "4":
+                        int currentEnemy = ChooseEnemy(enemies);
+                        if(currentEnemy == -1 || !_player.SecondSkillAttack(enemies[currentEnemy-1]))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            return;
+                        }
                     case "5":
                         if(!_player.ActivateShield())
                         {
@@ -412,41 +452,17 @@ namespace coursework
                             return;
                         }
                     case "6":
-                        if(!_player.DrinkHealingPotion())
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            return;
-                        }
+                        _player.DrinkHealingPotion();
+                        continue;
                     case "7":
-                        if(!_player.DrinkRagePotion())
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            return;
-                        }
+                        _player.DrinkRagePotion();
+                        continue;
                     case "8":
-                        if(!_player.DrinkManaPotion())
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            return;
-                        }
+                        _player.DrinkManaPotion();
+                        continue;
                     case "9":
-                        if(!_player.DrinkMysteriousPotion())
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            return;
-                        }
+                        _player.DrinkMysteriousPotion();
+                        continue;
                     case "10":
                         ViewEnemiesInfo(enemies);
                         WriteLine("\nPress any button to continue");
@@ -462,6 +478,23 @@ namespace coursework
                         continue;
                 }
             }
+        }
+        private static int ChooseEnemy(List<Enemy> enemies)
+        {
+            WriteLine("\nChoose enemy to attack: (enemy number)");
+            int enemyNum;
+            bool parsed = int.TryParse(ReadLine(), out enemyNum);
+            if(!parsed)
+            {
+                InvalidOption("Invalid input");
+                return -1;
+            }
+            if(enemyNum <= 0 || enemyNum > enemies.Count)
+            {
+                InvalidOption("This enemy does not exist");
+                return -1;
+            }
+            return enemyNum;
         }
         private static void ViewEnemiesInfo(List<Enemy> enemies)
         {

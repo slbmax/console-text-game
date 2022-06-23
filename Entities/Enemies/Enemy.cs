@@ -67,6 +67,7 @@ namespace coursework.Entities.Enemies
             }
             else
             {
+                Console.WriteLine($"\n***{_mobName} died***");
                 Notify.Invoke(this.ToString());
                 return false;
             }

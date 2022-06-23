@@ -10,11 +10,11 @@ namespace coursework.Entities.Enemies
         public Wolf(int level)
         {
             this._mobName = "wolf";
-            this.HealthLimit = 800 + level * 50;
+            this.HealthLimit = 750 + level * 50;
             this.Health = HealthLimit;
-            this.Armor = 300 + level * 50;
+            this.Armor = 250 + level * 50;
             this.ArmorLimit = Armor;
-            this.Attack = 250 + level * 50;
+            this.Attack = 220 + level * 50;
             this.coinsAward = 30;
             this.expAward = 90;
         }

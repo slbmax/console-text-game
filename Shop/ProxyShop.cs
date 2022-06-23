@@ -34,7 +34,7 @@ namespace coursework.Shop
         }
         public override void SellBigHealingPotion(Player p)
         {
-            if(!ValidatePlayerLevel(p.Level, 3))
+            if(!ValidatePlayerLevel(p.Level, 2))
             {
                 return;
             }
@@ -53,7 +53,7 @@ namespace coursework.Shop
         }
         public override void SellSmallHealingPotion(Player p)
         {
-            if(!ValidatePlayerLevel(p.Level, 2))
+            if(!ValidatePlayerLevel(p.Level, 1))
             {
                 return;
             }
@@ -72,7 +72,7 @@ namespace coursework.Shop
         }
         public override void SellBigRagePotion(Player p)
         {
-            if(!ValidatePlayerLevel(p.Level, 4))
+            if(!ValidatePlayerLevel(p.Level, 3))
             {
                 return;
             }
@@ -91,7 +91,7 @@ namespace coursework.Shop
         }
         public override void SellSmallRagePotion(Player p)
         {
-            if(!ValidatePlayerLevel(p.Level, 3))
+            if(!ValidatePlayerLevel(p.Level, 2))
             {
                 return;
             }
@@ -110,7 +110,7 @@ namespace coursework.Shop
         }
         public override void SellBigManaPotion(Player p)
         {
-            if(!ValidatePlayerLevel(p.Level, 5))
+            if(!ValidatePlayerLevel(p.Level, 4))
             {
                 return;
             }
@@ -129,7 +129,7 @@ namespace coursework.Shop
         }
         public override void SellSmallManaPotion(Player p)
         {
-            if(!ValidatePlayerLevel(p.Level, 5))
+            if(!ValidatePlayerLevel(p.Level, 3))
             {
                 return;
             }
@@ -148,7 +148,7 @@ namespace coursework.Shop
         }
         public override void SellMysteriousPotion(Player p)
         {
-            if(!ValidatePlayerLevel(p.Level, 5))
+            if(!ValidatePlayerLevel(p.Level, 4))
             {
                 return;
             }

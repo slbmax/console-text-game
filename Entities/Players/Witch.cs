@@ -11,6 +11,7 @@ namespace coursework.Entities.Players
         private int _soulCurseManaCost = 125;
         public Witch()
         {
+            this.characterType = "Witch";
             this.HealthLimit = 850;
             this.Health = HealthLimit;
             this.ArmorLimit = 850;
@@ -19,6 +20,7 @@ namespace coursework.Entities.Players
             this.Attack = AttackLimit;
             this.ManaLimit = 330;
             this.Mana = ManaLimit;
+            this._manaRecovery = 20;
         }
 
         //-----------Main Attack + Recover Mana---------//
@@ -30,15 +32,6 @@ namespace coursework.Entities.Players
         {
             Console.WriteLine("Evil Potion! hihihahaha!!");
             MakeDamage(enemy, Attack);
-        }
-        protected override void RecoverMana()
-        {
-            //TODO:
-            this.Mana += 4*_level;
-            if(Mana > ManaLimit)
-            {
-                Mana = ManaLimit;
-            }
         }
         //-----------Main Attack + Recover Mana---------//
         
@@ -87,12 +80,10 @@ namespace coursework.Entities.Players
         }
         protected override void ActivateSkillAttackBonus()
         {
-            //_armor += 5*Level;
-            Mana += 5 * Level;
-            if(Mana > ManaLimit)
-            {
-                Mana = ManaLimit;
-            }
+            double manaCB = ManaLimit*0.05;
+            Console.WriteLine($"Mana cashback: +[{manaCB}]");
+            Mana += manaCB;
+            Console.WriteLine($"Current Mana:  [{Mana}]");
         }
         //-----------First skill attack---------//
 
@@ -113,16 +104,18 @@ namespace coursework.Entities.Players
         }
         //-----------Second skill attack---------//
 
-        protected override void StatsUp()
+        protected override (int, int, int, int) StatsUp()
         {
-            //TODO:
+            int hpUp = 95;
+            int armorUp = 90;
+            int attackUp = 95;
+            int manaUp = 9;
+            return (hpUp, armorUp, attackUp, manaUp);
         }
         protected override void CheckUniqueSkillLevel()
         {
             //TODO:
         }
-        
-
         protected override void PerformShieldActivation()
         {
             DrinkArmorPotion();
@@ -130,6 +123,7 @@ namespace coursework.Entities.Players
         private void DrinkArmorPotion()
         {
             Console.WriteLine("Armor Potion! wihihihi!");
+            Console.WriteLine($"Armor bonus:   +[{this.ArmorLimit / 2.75}]");
             this.Armor += this.ArmorLimit / 2.75;
             Console.WriteLine($"Current armor: {Armor}");
         }
@@ -147,8 +141,6 @@ namespace coursework.Entities.Players
             Console.WriteLine($"Second skill attack:    [{_soulCurseDamage * _soulCurseLevel+ Attack/2.5}] damage; 50% - direct attack");
             Console.WriteLine($"Second skill level:     [{ _soulCurseLevel}]");
             Console.WriteLine($"Second skill mana cost: [{ _soulCurseManaCost}]");
-            Console.WriteLine($"Mana recovery:          [...] per attack");
-        }
-        
+        }      
     }
 }

@@ -3,7 +3,7 @@ namespace coursework.Entities.Enemies
 {
     public class JungleGiant : Giant
     {
-        private double _manaReductionCoeff = 0.95;
+        private double _manaReductionCoeff = 0.965;
         public JungleGiant(int level, double juglesBonus) : base(level)
         {
             this._mobName = "Jungle " + _mobName;

@@ -11,6 +11,7 @@ namespace coursework.Entities.Players
         private int _almightyPushManaCost = 150;
         public Warrior()
         {
+            this.characterType = "Warrior";
             this.HealthLimit = 1000;
             this.Health = HealthLimit;
             this.ArmorLimit = 1000;
@@ -19,6 +20,7 @@ namespace coursework.Entities.Players
             this.Attack = AttackLimit;
             this.ManaLimit = 275;
             this.Mana = ManaLimit;
+            this._manaRecovery = 15;
         }
         //-----------Main Attack + Recover Mana---------//
         protected override void PerformMainAttack(Enemy en)
@@ -31,14 +33,6 @@ namespace coursework.Entities.Players
             MakeDamage(enemy, Attack);
             //attack bonus?
         }
-        protected override void RecoverMana()
-        {
-            this.Mana += 3*_level;
-            if(Mana > ManaLimit)
-            {
-                Mana = ManaLimit;
-            }
-        }
         //-----------Main Attack + Recover Mana---------//
 
 
@@ -49,7 +43,7 @@ namespace coursework.Entities.Players
         }
         private void SmashingBlade(List<Enemy> enemies) // rand wrag + probivka + echo na ostalnuh
         {
-            Console.WriteLine("Let my blade smash your head!");
+            Console.WriteLine("Let my blade smash your head! Smashing blade!");
             Random rand = new Random();
             int unlucky = rand.Next(0,enemies.Count);
             MakeDamage(enemies[unlucky], Attack*0.7);
@@ -84,7 +78,10 @@ namespace coursework.Entities.Players
         }
         protected override void ActivateSkillAttackBonus()
         {
-            
+            double armorBonus = ArmorLimit/5.5;
+            Console.WriteLine($"Armor bonus:   +[{armorBonus}]");
+            Armor += armorBonus;
+            Console.WriteLine($"Current armor: [{Armor}]");
         }
         //-----------First skill attack---------//
 
@@ -105,19 +102,18 @@ namespace coursework.Entities.Players
         }
         //-----------Second skill attack---------//
 
-        protected override void StatsUp()
+        protected override (int, int, int, int) StatsUp()
         {
-            
+            int hpUp = 100;
+            int armorUp = 90;
+            int attackUp = 95;
+            int manaUp = 8;
+            return (hpUp, armorUp, attackUp, manaUp);
         }
         protected override void CheckUniqueSkillLevel()
         {
             //TODO:
         }
-
-
-        
-
-        
         protected override void PerformShieldActivation()
         {
             ActivateWarriorShield();
@@ -125,6 +121,7 @@ namespace coursework.Entities.Players
         private void ActivateWarriorShield()
         {
             Console.WriteLine("Warrior Shield!");
+            Console.WriteLine($"Armor bonus:   +[{this.ArmorLimit / 3}]");
             this.Armor += this.ArmorLimit / 3;
             Console.WriteLine($"Current armor: {Armor}");
         }
@@ -143,8 +140,6 @@ namespace coursework.Entities.Players
             Console.WriteLine($"Second skill attack:    [{_bloodlustDamage * _bloodlustLevel+Attack/2.5}] damage; 30% - direct attack");
             Console.WriteLine($"Second skill level:     [{ _bloodlustLevel}]");
             Console.WriteLine($"Second skill mana cost: [{ _bloodlustManaCost}]");
-            Console.WriteLine($"Mana recovery:          [...] per attack");
-        }
-        
+        }  
     }
 }

@@ -3,7 +3,7 @@ namespace coursework.Entities.Enemies
 {
     public class SwampGiant : Giant
     {
-        private double _healthReductionCoeff = 0.95;
+        private double _healthReductionCoeff = 0.965;
         public SwampGiant(int level, double hpBonus, double attackBonus) : base(level)
         {
             this._mobName = "Swamp " + _mobName;

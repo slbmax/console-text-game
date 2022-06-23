@@ -7,6 +7,7 @@ namespace coursework.Entities.Players
         public delegate void Callback(string sender, string value = null);
         public event Callback Notify;
         public string nickName;
+        public string characterType {get; protected set;}
         protected int _coins = 0;
         public int Coins
         {
@@ -14,12 +15,12 @@ namespace coursework.Entities.Players
             set => _coins = value;
         }
         protected int _experience = 0;
-        protected int _skillsLevel = 1; //level skilov
         protected int _level = 1;
         public int Level
         {
             get => _level;
         }
+        protected int _manaRecovery;
         public HealingPotion healingPotion;
         public RagePotion ragePotion;
         public ManaPotion manaPotion;
@@ -35,7 +36,18 @@ namespace coursework.Entities.Players
             return true;
         }
         abstract protected void PerformMainAttack(Enemy enemy);
-        abstract protected void RecoverMana();
+        protected void RecoverMana()
+        {
+            Console.Write("Mana recovery: ");
+            int recoveredMana = _manaRecovery + ((_level-1)*2);
+            Console.WriteLine($"+[{recoveredMana }]");
+            this.Mana += recoveredMana;
+            if(Mana > ManaLimit)
+            {
+                Mana = ManaLimit;
+            }
+            Console.WriteLine($"Current mana:  [{Mana}]");
+        }
         
         //-----------Main Attack + Recover Mana---------//
 
@@ -76,6 +88,7 @@ namespace coursework.Entities.Players
                 Console.WriteLine("Not enough mana to cast skill attack");
                 return false;
             }
+            Mana -= skillManaCost;
             return true;
         }
         abstract protected double CheckSkillManaCost(bool firstSkill);
@@ -113,24 +126,35 @@ namespace coursework.Entities.Players
                 _level++;
                 Console.WriteLine("\n[---------------Level Up---------------]");
                 Console.WriteLine("Stats up:");
-                StatsUp();
+                (int,int,int,int) valuesToUp = StatsUp();
+                this.HealthLimit += valuesToUp.Item1;
+                this.Health = HealthLimit;
+                this.ArmorLimit += valuesToUp.Item2;
+                this.Armor = ArmorLimit;
+                this.AttackLimit += valuesToUp.Item3;
+                this.Attack = AttackLimit;
+                this.ManaLimit += valuesToUp.Item4;
+                Console.WriteLine($"Max hp points:     +{valuesToUp.Item1} [{HealthLimit}]");
+                Console.WriteLine($"Max armor points:  +{valuesToUp.Item2} [{ArmorLimit}]");
+                Console.WriteLine($"Max attack points: +{valuesToUp.Item3} [{AttackLimit}]");
+                Console.WriteLine($"Max mana points:   +{valuesToUp.Item4} [{ManaLimit}]");
                 CheckUniqueSkillLevel();
                 Console.WriteLine("[---------------Level Up---------------]");
                 Notify.Invoke(this.ToString(), "level");
             }
         }
-        abstract protected void StatsUp();
+        abstract protected (int,int,int,int) StatsUp();
         abstract protected void CheckUniqueSkillLevel();
         public override bool DrinkHealingPotion()
         {
-            if(Health == HealthLimit)
-            {
-                Console.WriteLine("You can`t drink healing potion - you health points are on maximum");
-                return false;
-            }
             if(healingPotion == null)
             {
                 Console.WriteLine("There aren`t any healing potions in your inventory");
+                return false;
+            }
+            if(Health == HealthLimit)
+            {
+                Console.WriteLine("You can`t drink healing potion - you health points are on maximum");
                 return false;
             }
             healingPotion.ActivateEffect(this);
@@ -156,14 +180,14 @@ namespace coursework.Entities.Players
         }
         public bool DrinkManaPotion()
         {
-            if(Mana == ManaLimit)
-            {
-                Console.WriteLine("You can`t drink mana potion - you mana points are on maximum");
-                return false;
-            }
             if(manaPotion == null)
             {
                 Console.WriteLine("There aren`t any mana potions in your inventory");
+                return false;
+            }
+            if(Mana == ManaLimit)
+            {
+                Console.WriteLine("You can`t drink mana potion - you mana points are on maximum");
                 return false;
             }
             manaPotion.ActivateEffect(this);
@@ -200,10 +224,12 @@ namespace coursework.Entities.Players
         public override void ShowInfo()
         {
             Console.WriteLine($"\n[---------------{nickName}---------------]");
+            Console.WriteLine($"Character type:         [{characterType}]");
             Console.WriteLine($"Level:                  [{Level}]");
             Console.WriteLine($"Health:                 [{Health}/{HealthLimit}]");
             Console.WriteLine($"Armor:                  [{Armor}/{ArmorLimit}]");
             Console.WriteLine($"Mana:                   [{Mana}/{ManaLimit}]");
+            Console.WriteLine($"Mana recovery:          [{_manaRecovery + ((_level-1)*2)}] per attack");
             Console.WriteLine($"Potions:");
             char hp, rage, mana, myst;
             hp = healingPotion == null ? '-' : '+';
