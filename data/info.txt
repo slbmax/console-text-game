@@ -1,0 +1,28 @@
+[---------------WarMax---------------]
+Hello, stranger!
+
+WarMax is a text RPG, where you can fight against different mobs, complete various quests and boost your character.
+
+There aren`t any special goals to achieve - you can do everything you want:
+- complete quests;
+- try to get the biggest counter of killed slimes;
+- achive 100, 200 and even higher levels, etc.
+
+There are 3 locations where you can face yor enemy:
+- Jungles;
+- Cave;
+- Swamp.
+
+Each location has own specifics, for example enemies can have more attack points and special extra effect.
+
+There are three main mobs, each of them also have specific attack and unique ability:
+- Slime;
+- Wolf;
+- Giant;
+
+Combat consists of your and enemy turns. You can attack twice during your turn. Notice that drinking any kind of potion is not an attack move, so you can sip them without losing your attack move.
+You can find different kinds of potions in the MaxShop. Notice that you should have appropriate level and balance to buy them.
+
+This is a brief info about the game. You will learn more interesting things in process.
+GLHF! 
+[---------------WarMax---------------]
